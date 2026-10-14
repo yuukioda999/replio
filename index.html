@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Replioは、メールやチャットの返信文を考える負担を減らすAI返信文作成サービス。現在、開発に向けたアンケートを実施しています。">
+<meta name="theme-color" content="#ffffff">
+<title>Replio | 返信に悩む時間を、もっと短く。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111827;--muted:#626b78;--line:#e5e7eb;--paper:#fff;--subtle:#f9fafb;--accent:#12684e;--accent-dark:#0c4f3c;--tint:#eef7f2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.85 Inter,"Noto Sans JP",sans-serif;-webkit-font-smoothing:antialiased}button,textarea,select{font:inherit}a{color:inherit;text-decoration:none}button,a,summary{touch-action:manipulation}a:focus-visible,button:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #83c6a9;outline-offset:3px}button{cursor:pointer}.wrap{max-width:1160px;padding:0 28px;margin:0 auto}.icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round;flex:none}.icon.small{width:16px;height:16px}.icon.large{width:29px;height:29px}
+header{border-bottom:1px solid var(--line);background:#fffc;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:22px}.brand{font-weight:800;letter-spacing:-.07em;font-size:27px}.navlinks{display:flex;gap:28px;align-items:center;margin-right:auto;margin-left:60px}.navlinks a{font-size:12px;font-weight:600;color:#414b56}.navlinks a:hover{color:var(--accent)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid var(--accent);background:var(--accent);color:white;padding:13px 19px;border-radius:6px;font-size:13px;font-weight:700;line-height:1.5;transition:background .15s,transform .15s}.btn:hover{background:var(--accent-dark);transform:translateY(-1px)}.btn.secondary{background:#fff;color:var(--ink);border-color:#d1d5db}.btn.secondary:hover{background:var(--subtle)}.nav .btn{padding:10px 15px;font-size:12px}
+.hero{padding:90px 0 102px}.hero-grid{display:grid;grid-template-columns:.95fr 1.12fr;gap:52px;align-items:center}.eyebrow,.section-label{font-size:11px;font-weight:700;letter-spacing:.16em;color:#667181;text-transform:uppercase}.hero h1{font-size:clamp(40px,4.7vw,68px);letter-spacing:-.085em;line-height:1.33;margin:21px 0 24px;font-weight:800}.hero p{color:#53606d;font-size:15px;line-height:2.15;margin:0;max-width:490px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:31px}.fine{font-size:11px!important;color:#7b8491!important;line-height:1.8!important;margin-top:14px!important}
+.preview{border:1px solid #e1e5e9;border-radius:12px;background:#fff;box-shadow:0 18px 55px #17202b0a;overflow:hidden}.preview-head{height:36px;border-bottom:1px solid var(--line);background:#fafbfc;display:flex;align-items:center;gap:6px;padding:0 14px}.preview-head span{width:8px;height:8px;border-radius:50%;background:#d4d8dd}.preview-body{display:grid;grid-template-columns:125px 1fr;min-height:430px}.preview-side{padding:18px 9px;border-right:1px solid var(--line);background:#fcfcfd}.preview-side .wordmark{font-weight:800;font-size:14px;letter-spacing:-.05em;padding:0 8px 18px}.side-item{font-size:10px;color:#7b8491;padding:10px 8px;display:flex;align-items:center;gap:7px;border-radius:5px}.side-item.active{background:var(--tint);color:var(--accent);font-weight:700}.side-item .icon{width:14px;height:14px}.preview-main{padding:22px 21px}.preview-title{font-size:13px;font-weight:750;margin-bottom:18px}.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.label{font-size:11px;font-weight:700;display:block;margin-bottom:6px}.mock-textarea{resize:none;width:100%;min-height:91px;border:1px solid #dce1e6;border-radius:6px;padding:10px 11px;background:#fff;font-size:11px;line-height:1.7;color:#27313c}.mock-textarea.intent{min-height:72px}.count{font-size:10px;text-align:right;color:#8a94a0;margin-top:3px}.fieldrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.select{width:100%;border:1px solid #dce1e6;border-radius:6px;padding:9px 7px;background:#fff;color:#25303b;font-size:11px}.demo-action{width:100%;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:#fff;padding:11px 6px;margin-top:16px;font-size:11px;font-weight:700}.demo-action:hover{background:var(--accent-dark)}.demo-action:disabled{opacity:.75;cursor:wait}.copy:disabled{opacity:.45;cursor:not-allowed}.result-panel{background:var(--subtle);border:1px solid #f0f1f3;border-radius:7px;padding:13px;display:flex;flex-direction:column;min-height:310px}.result-panel .label{margin-bottom:11px}.result-text{white-space:pre-wrap;font-size:11px;line-height:2;flex:1;color:#374151}.result-actions{display:flex;justify-content:flex-end;margin-top:14px}.copy{border:1px solid #dce1e6;background:#fff;color:#334155;border-radius:5px;padding:8px 11px;display:flex;gap:6px;align-items:center;font-size:11px;font-weight:600}.copy:hover{background:#f4f5f6}.demo-caption{font-size:10px;color:#89919c;margin-top:12px}
+section{scroll-margin-top:80px}.section{padding:90px 0}.section h2{font-size:clamp(27px,3vw,38px);line-height:1.45;letter-spacing:-.055em;margin:10px 0 15px}.section-intro{display:flex;justify-content:space-between;gap:35px;align-items:end;margin-bottom:32px}.section-intro p{max-width:400px;color:var(--muted);font-size:13px;margin:0}
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:15px}.feature{border:1px solid var(--line);border-radius:10px;padding:31px 33px;background:#fff;min-height:215px}.feature .icon{margin-bottom:20px}.feature h3{font-size:17px;letter-spacing:-.03em;margin:0 0 8px}.feature p{font-size:13px;color:var(--muted);margin:0;max-width:440px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:33px}.step{display:flex;gap:15px}.step-num{width:40px;height:40px;display:grid;place-items:center;background:#f0f2f4;border-radius:50%;font-weight:700;flex:none}.step h3{font-size:14px;margin:2px 0 5px}.step p{font-size:12px;color:var(--muted);margin:0}.muted-section{background:#fafbfc;border-top:1px solid #f2f3f5;border-bottom:1px solid #f2f3f5}
+.examples{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:31px}.example{border:1px solid var(--line);border-radius:10px;padding:20px;background:#fff}.example h3{font-size:13px;margin:0 0 16px;display:flex;gap:9px;align-items:center}.bubble{padding:14px;border-radius:7px;background:#f5f6f8;font-size:12px;line-height:1.9;min-height:91px;white-space:pre-line}.bubble.answer{background:var(--tint);min-height:152px}.down{display:flex;justify-content:center;margin:10px;color:#9ca3af}
+.usecases{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:28px}.usecase{display:flex;align-items:flex-start;gap:12px}.usecase strong{display:block;font-size:13px}.usecase p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.cta{padding:87px 0;text-align:center}.cta h2{margin:8px 0 12px}.cta p{font-size:13px;color:var(--muted);margin:0 auto 23px;max-width:630px}.cta .fine{margin-top:13px!important}.faq{max-width:800px;margin-top:25px}.faq details{border-bottom:1px solid var(--line)}.faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:15px;padding:20px 0;font-weight:650;font-size:14px;cursor:pointer}.faq summary::-webkit-details-marker{display:none}.faq summary .icon{transition:transform .15s}.faq details[open] summary .icon{transform:rotate(45deg)}.faq details p{font-size:13px;color:var(--muted);margin:0 0 20px}footer{border-top:1px solid var(--line);padding:26px 0;color:#7c8590;font-size:11px}.footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+@media(max-width:1050px){.hero-grid{grid-template-columns:1fr;gap:46px}.hero{padding:65px 0}.preview{max-width:760px;width:100%}.navlinks{margin-left:24px;gap:17px}}
+@media(max-width:720px){.wrap{padding:0 20px}.nav{height:64px}.navlinks{display:none}.brand{font-size:24px}.nav .btn{font-size:10px;padding:9px 10px}.hero{padding:58px 0 64px}.hero h1{font-size:clamp(38px,8.6vw,56px)}.hero p{font-size:14px}.hero-actions .btn{width:100%}.preview-body{grid-template-columns:1fr}.preview-side{display:none}.preview-main{padding:17px}.section{padding:68px 0}.section-intro{display:block}.section-intro p{margin-top:13px}.bento,.examples{grid-template-columns:1fr}.feature{min-height:0;padding:26px}.steps{grid-template-columns:1fr;gap:26px}.usecases{grid-template-columns:1fr 1fr}.demo-grid{gap:9px}.result-panel{padding:10px}.mock-textarea{font-size:10px}.footer-inner{flex-direction:column}}
+@media(max-width:430px){.usecases{grid-template-columns:1fr}.preview-main{padding:12px}.demo-grid{grid-template-columns:1fr}.result-panel{min-height:200px}.hero h1{font-size:39px}.nav .btn .icon{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<!-- Self-contained Lucide-style icon sprites. No emojis or external icon libraries required. -->
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14m-6-6 6 6 6-6"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3"/><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5A9 9 0 1 1 21 11.5Z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18m-12 5 2 2 4-4"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 2-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21h-3v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1-2-2 .1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H5v-3h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-2 .1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5V5h3v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1 2 2-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.2v3h-.2a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+</svg>
+<header><div class="wrap nav"><a class="brand" href="#top" aria-label="Replio トップ">Replio</a><nav class="navlinks" aria-label="ページ内メニュー"><a href="#features">特徴</a><a href="#how">使い方</a><a href="#examples">返信例</a><a href="#cases">活用シーン</a><a href="#faq">よくある質問</a></nav><a class="btn" href="#survey">アンケートに回答する <svg class="icon small"><use href="#i-external"/></svg></a></div></header>
+<main id="top">
+<section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">AI REPLY ASSISTANT / COMING SOON</div><h1>返信に悩む時間を、<br>もっと短く。</h1><p>メールやチャットの受信メッセージを貼り付け、伝えたいことを入力するだけ。AIが返信の下書きを作成するサービスを準備しています。<br>ビジネスのやり取りを、丁寧に、スムーズに。</p><div class="hero-actions"><a class="btn" href="#survey">先行利用アンケートに回答する <svg class="icon small"><use href="#i-external"/></svg></a><a class="btn secondary" href="#examples">返信例を見る <svg class="icon small"><use href="#i-arrow"/></svg></a></div><p class="fine">※ 現在は開発準備中です。以下は機能のイメージです。</p></div>
+<div class="preview" aria-label="返信作成画面のデモ"><div class="preview-head"><span></span><span></span><span></span></div><div class="preview-body"><aside class="preview-side"><div class="wordmark">Replio</div><div class="side-item active"><svg class="icon"><use href="#i-file"/></svg>新しい返信を作成</div><div class="side-item"><svg class="icon"><use href="#i-clock"/></svg>履歴（今後の予定）</div><div class="side-item"><svg class="icon"><use href="#i-settings"/></svg>設定（今後の予定）</div></aside><div class="preview-main"><div class="preview-title">返信の下書きを作成</div><div class="demo-grid"><div><label class="label" for="received">受信メッセージ</label><textarea class="mock-textarea" id="received" maxlength="2000" readonly aria-readonly="true">来週までに対応可能でしょうか？
+進捗状況を教えていただけると助かります。</textarea><div class="count"><span id="receivedCount">0</span> / 2,000</div><label class="label" for="intent">返信したい内容（指示・意図）</label><textarea class="mock-textarea intent" id="intent" maxlength="1000" readonly aria-readonly="true">確認してから回答したい。
+期限の調整も相談したい。</textarea><div class="count"><span id="intentCount">0</span> / 1,000</div><div class="fieldrow"><div><label class="label" for="channel">媒体</label><select class="select" id="channel"><option value="email">メール</option><option value="slack">Slack</option><option value="chat">チャット</option></select></div><div><label class="label" for="tone">文体</label><select class="select" id="tone"><option value="polite">丁寧</option><option value="normal">ふつう</option><option value="short">簡潔</option></select></div></div><button class="demo-action" type="button" id="generate">返信案を生成する（デモ）</button></div><div class="result-panel"><div class="label">生成された返信案（例）</div><div class="result-text" id="result" aria-live="polite">「返信案を生成する（デモ）」を押すと、返信の下書きが表示されます。</div><div class="result-actions"><button class="copy" type="button" id="copy" disabled aria-disabled="true"><svg class="icon small"><use href="#i-copy"/></svg><span id="copyLabel">コピー</span></button></div></div></div><div class="demo-caption">※ 入力文は固定です。生成中の演出後にサンプル文を表示します。AI APIへの送信は行いません。</div></div></div></div></div></section>
+<section class="section" id="features"><div class="wrap"><div class="section-intro"><div><div class="section-label">FEATURES</div><h2>ビジネスの返信を、<br>シンプルに。</h2></div><p>伝えたい内容を整理して、自然な返信文に。日々のメール・チャット対応で使いやすい、必要十分な機能を目指しています。</p></div><div class="bento"><article class="feature"><svg class="icon large"><use href="#i-mail"/></svg><h3>ビジネス文に合わせた下書き</h3><p>丁寧・ふつう・簡潔など、場面に合わせた文体で、伝えたい内容を文章にまとめます。</p></article><article class="feature"><svg class="icon large"><use href="#i-file"/></svg><h3>複数の媒体に対応予定</h3><p>メール、Slack、チャットなど、日常的なやり取りでの利用を想定しています。</p></article><article class="feature"><svg class="icon large"><use href="#i-clock"/></svg><h3>文章を考える負担を軽減</h3><p>ゼロから返信を書く代わりに、下書きを確認・修正する流れを目指します。</p></article><article class="feature"><svg class="icon large"><use href="#i-shield"/></svg><h3>確認してから送信</h3><p>納期・金額・対応可否を勝手に確約しない設計を目指し、送信前の内容確認を促します。</p></article></div></div></section>
+<section class="section muted-section" id="how"><div class="wrap"><div class="section-label">HOW TO USE</div><h2>使い方は3ステップ。</h2><div class="steps"><div class="step"><div class="step-num">1</div><div><h3>受信メッセージを貼り付ける</h3><p>メールやチャットの文章を入力します。</p></div></div><div class="step"><div class="step-num">2</div><div><h3>返信したい内容を入力する</h3><p>伝えたい意図や文体を指定します。</p></div></div><div class="step"><div class="step-num">3</div><div><h3>返信案を確認してコピーする</h3><p>下書きを確認・修正して利用します。</p></div></div></div></div></section>
+<section class="section" id="examples"><div class="wrap"><div class="section-label">EXAMPLES</div><h2>こんな返信案を作れます。</h2><p style="font-size:13px;color:var(--muted);margin:0">以下は想定している出力例です。実際のAI生成結果ではありません。</p><div class="examples"><article class="example"><h3><svg class="icon small"><use href="#i-mail"/></svg>取引先へのメール</h3><div class="bubble">来週のお打ち合わせについて、日程の候補をいくつかいただけますか？</div><div class="down"><svg class="icon small"><use href="#i-down"/></svg></div><div class="bubble answer">ご連絡ありがとうございます。<br>来週のお打ち合わせについて、候補日時を確認のうえ、改めてご連絡いたします。</div></article><article class="example"><h3><svg class="icon small"><use href="#i-message"/></svg>社内チャット</h3><div class="bubble">この資料、明日までに対応できますか？</div><div class="down"><svg class="icon small"><use href="#i-down"/></svg></div><div class="bubble answer">確認ありがとうございます。<br>内容を確認し、明日までに対応できるか改めてお伝えします。</div></article><article class="example"><h3><svg class="icon small"><use href="#i-calendar"/></svg>日程調整</h3><div class="bubble">今週中にオンラインでお話しできませんか？</div><div class="down"><svg class="icon small"><use href="#i-down"/></svg></div><div class="bubble answer">お声がけありがとうございます。<br>今週の予定を確認して、候補日時をお送りします。少々お待ちください。</div></article></div></div></section>
+<section class="section muted-section" id="cases"><div class="wrap"><div class="section-label">USE CASES</div><h2>こんな場面で活用できます。</h2><div class="usecases"><div class="usecase"><svg class="icon"><use href="#i-mail"/></svg><div><strong>ビジネスメール</strong><p>取引先や社内とのやり取りに。</p></div></div><div class="usecase"><svg class="icon"><use href="#i-message"/></svg><div><strong>社内チャット</strong><p>Slackなどの短い返信に。</p></div></div><div class="usecase"><svg class="icon"><use href="#i-file"/></svg><div><strong>問い合わせ対応</strong><p>回答内容を整理したいときに。</p></div></div><div class="usecase"><svg class="icon"><use href="#i-calendar"/></svg><div><strong>日程調整</strong><p>予定を確認して返答するときに。</p></div></div></div></div></section>
+<section class="cta" id="survey"><div class="wrap"><div class="section-label">YOUR FEEDBACK</div><h2>まずは、あなたの意見を<br>お聞かせください。</h2><p>Replioは現在開発準備中です。どのような返信業務で役立つかを確認するため、短いアンケートを実施しています。</p><a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSe_FOZlT2bK8XivBBRR0DQLgROGGRyG4bR__d8RKNvOtu0_GQ/viewform" target="_blank" rel="noopener noreferrer">先行利用アンケートに回答する <svg class="icon small"><use href="#i-external"/></svg></a><p class="fine">※ 外部のGoogleフォームが開きます。回答により先行利用や連絡を保証するものではありません。</p></div></section>
+<section class="section muted-section" id="faq"><div class="wrap"><div class="section-label">FAQ</div><h2>よくある質問</h2><div class="faq"><details><summary>現在、利用できますか？<svg class="icon small"><use href="#i-plus"/></svg></summary><p>現在は開発準備中です。このページのデモは固定サンプルで、実際のAI返信生成機能ではありません。</p></details><details><summary>利用料金はかかりますか？<svg class="icon small"><use href="#i-plus"/></svg></summary><p>料金プランは未定です。ニーズの検証とサービスの開発状況を踏まえて検討します。</p></details><details><summary>入力した内容は保存されますか？<svg class="icon small"><use href="#i-plus"/></svg></summary><p>このページのデモは入力内容をサーバーに送信しません。実際のAI機能の提供時には、入力内容の取り扱いとプライバシー方針を公開します。</p></details><details><summary>生成された返信はそのまま送れますか？<svg class="icon small"><use href="#i-plus"/></svg></summary><p>生成文は下書きとして扱う想定です。納期・金額・対応可否などを確認し、必要に応じて修正してから送信してください。</p></details></div></div></section>
+</main>
+<footer><div class="wrap footer-inner"><span>© 2026 Replio</span><span>本サービスは開発準備中です。画面・返信文はサンプルです。</span></div></footer>
+<script>
+(()=>{
+const received=document.getElementById('received');
+const intent=document.getElementById('intent');
+const result=document.getElementById('result');
+const tone=document.getElementById('tone');
+const channel=document.getElementById('channel');
+const generate=document.getElementById('generate');
+const copy=document.getElementById('copy');
+const copyLabel=document.getElementById('copyLabel');
+const placeholder='「返信案を生成する（デモ）」を押すと、返信の下書きが表示されます。';
+const samples={
+  polite:'ご連絡ありがとうございます。\n\n現在の進捗状況を確認しておりますので、改めてご連絡いたします。\n\nまた、納期についても調整の可能性がないか確認し、あわせてご案内いたします。\n\n引き続き、よろしくお願いいたします。',
+  normal:'ご連絡ありがとうございます。\n\n進捗を確認して、改めてご連絡します。\n納期についても調整できるか確認しておきます。\n\nよろしくお願いします。',
+  short:'ご連絡ありがとうございます。\n進捗と納期の調整可否を確認し、改めてご連絡します。'
+};
+let pending=null;
+let ready=false;
+function reset(){
+  if(pending!==null){clearTimeout(pending);pending=null;}
+  ready=false;
+  result.textContent=placeholder;
+  generate.disabled=false;
+  generate.textContent='返信案を生成する（デモ）';
+  copy.disabled=true;
+  copy.setAttribute('aria-disabled','true');
+  copyLabel.textContent='コピー';
+}
+document.getElementById('receivedCount').textContent=Array.from(received.value).length;
+document.getElementById('intentCount').textContent=Array.from(intent.value).length;
+function startDemo(){
+  if(pending!==null)return;
+  ready=false;
+  generate.disabled=true;
+  copy.disabled=true;
+  copy.setAttribute('aria-disabled','true');
+  generate.textContent='返信案を作成しています…';
+  result.textContent='返信内容を整理しています…';
+  pending=setTimeout(()=>{
+    pending=null;
+    result.textContent=samples[tone.value];
+    ready=true;
+    generate.disabled=false;
+    generate.textContent='もう一度生成する（デモ）';
+    copy.disabled=false;
+    copy.setAttribute('aria-disabled','false');
+  },950);
+}
+generate.addEventListener('click',startDemo);
+tone.addEventListener('change',reset);
+channel.addEventListener('change',reset);
+copy.addEventListener('click',async()=>{
+  if(!ready)return;
+  try{
+    await navigator.clipboard.writeText(result.textContent);
+    copyLabel.textContent='コピーしました';
+  }catch{
+    copyLabel.textContent='コピーできません';
+  }
+});
+reset();
+})();
+</script>
+</body>
+</html>
