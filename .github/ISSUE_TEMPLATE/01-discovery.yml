@@ -1,0 +1,36 @@
+name: "Discovery / 顧客検証"
+description: "市場・顧客・価格仮説を検証する"
+title: "[Discovery] "
+labels: ["discovery"]
+body:
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: 検証する仮説
+      description: 反証可能な形で記述
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 証拠・情報源
+      description: URL、確認日、匿名化した発言、母数など
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 完了条件
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: decision
+    attributes:
+      label: 判断
+      options: ["未判断", "Go", "Pivot", "Stop", "判断保留"]
+  - type: textarea
+    id: ai
+    attributes:
+      label: AI活用と人間の検証
+      description: 利用ツール、提案の採否、一次情報の確認

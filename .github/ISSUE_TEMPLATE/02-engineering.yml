@@ -1,0 +1,42 @@
+name: "Engineering / 実装"
+description: "開発・品質・運用改善の作業"
+title: "[Engineering] "
+labels: ["engineering"]
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: 背景とユーザー価値
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: スコープと非対象
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 受入基準（検証可能なもの）
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: リスク・セキュリティ・コスト
+  - type: textarea
+    id: tests
+    attributes:
+      label: テスト・計測方法
+    validations:
+      required: true
+  - type: textarea
+    id: ai
+    attributes:
+      label: AIの提案と人間の判断
+  - type: textarea
+    id: links
+    attributes:
+      label: 関連ADR・PR・計測結果
