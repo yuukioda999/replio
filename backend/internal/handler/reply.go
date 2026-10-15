@@ -36,6 +36,8 @@ func (h ReplyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
  }
  var extra any
  if err := dec.Decode(&extra); err != io.EOF {
+  var maxErr *http.MaxBytesError
+  if errors.As(err, &maxErr) { writeError(w, http.StatusRequestEntityTooLarge, "request_too_large"); return }
   writeError(w, http.StatusBadRequest, "invalid_json"); return
  }
  reply, err := h.Service.Generate(r.Context(), req)
