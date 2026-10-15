@@ -535,3 +535,14 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **安全性:** Composeはローカル開発用のみ。Fake LLM、`GENERATION_ENABLED=true`。本番公開時は無効化・認証などを別途検討。
 - **テスト:** Compose構成検証、ビルド、HTTPスモークテストをCIに追加。CI結果確認と人間レビュー前のmainマージはしない。
 - **影響範囲:** Docker構成・ドキュメント・CI。本番Claude API、DB、GitHub Pages LPは変更しない。
+
+
+---
+
+## 25. 2026-10-15 QA-001 入力検証とエラー処理強化
+
+- **Issue:** #28。入力の文字数制限、媒体・文体の値検証、空レスポンスの拒否を実装。
+- **通信:** HTTP 400/413/429/503、ネットワークエラー、AbortError、不正JSONを分離してユーザー向けに通知。
+- **テスト:** TypeScriptをNodeテスト内で変換し、検証・レスポンス解析・HTTP異常系を実行する単体テストを追加。
+- **影響範囲:** frontendのAPIクライアント、テスト、履歴のみ。LPとClaude APIの設定は変更なし。
+- **状態:** PRでCIとレビュー確認後にmainへマージ。
