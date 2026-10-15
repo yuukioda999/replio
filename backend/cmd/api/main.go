@@ -25,8 +25,12 @@ func portFromEnv(getenv func(string) string) (string, error) {
 func newHandler() http.Handler { return newHandlerWithLLM(infrastructure.FakeLLM{}) }
 
 func newHandlerWithLLM(llm application.LLM) http.Handler {
+ return newHandlerWithGuard(llm, handler.NewGuard(10, time.Hour, 2, true))
+}
+
+func newHandlerWithGuard(llm application.LLM, guard *handler.Guard) http.Handler {
  mux := http.NewServeMux()
- mux.Handle("/api/v1/replies/generate", handler.ReplyHandler{Service: application.Service{LLM: llm}})
+ mux.Handle("/api/v1/replies/generate", guard.Wrap(handler.ReplyHandler{Service: application.Service{LLM: llm}}))
  mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
   if r.Method != http.MethodGet {
    w.Header().Set("Allow", "GET")
@@ -61,14 +65,33 @@ func llmFromEnv(getenv func(string) string) (application.LLM, error) {
  }
 }
 
+func guardFromEnv(getenv func(string) string) (*handler.Guard,error) {
+ enabled:=getenv("GENERATION_ENABLED")=="true"
+ maxRequests:=10
+ if raw:=getenv("GENERATION_MAX_REQUESTS_PER_HOUR");raw!="" {
+  n,err:=strconv.Atoi(raw)
+  if err!=nil || n<1 || n>10000 {return nil,errors.New("GENERATION_MAX_REQUESTS_PER_HOUR must be 1 to 10000")}
+  maxRequests=n
+ }
+ concurrent:=2
+ if raw:=getenv("GENERATION_MAX_CONCURRENT");raw!="" {
+  n,err:=strconv.Atoi(raw)
+  if err!=nil || n<1 || n>100 {return nil,errors.New("GENERATION_MAX_CONCURRENT must be 1 to 100")}
+  concurrent=n
+ }
+ return handler.NewGuard(maxRequests,time.Hour,concurrent,enabled),nil
+}
+
 func main() {
  port, err := portFromEnv(os.Getenv)
  if err != nil { log.Fatal(err) }
  llm, err := llmFromEnv(os.Getenv)
  if err != nil { log.Fatal(err) }
+ guard,err:=guardFromEnv(os.Getenv)
+ if err!=nil {log.Fatal(err)}
  server := &http.Server{
   Addr: ":" + port,
-  Handler: newHandlerWithLLM(llm),
+  Handler: newHandlerWithGuard(llm,guard),
   ReadHeaderTimeout: 5 * time.Second,
  }
  log.Printf("Replio API listening on :%s", port)
