@@ -34,7 +34,6 @@ export default function Home() {
   return <div className="app-shell">
     <header className="topbar"><div className="topbar-inner"><a className="wordmark" href="/" aria-label="Replio ホーム"><span className="logo-symbol">R<span>.</span></span><span>replio</span></a><span className="top-divider"/><span className="top-label">返信文ジェネレーター</span><span className="top-spacer"/><span className="status"><span className="status-dot"/>ワークスペース</span></div></header>
     <main className="main">
-      <div className="heading"><div className="eyebrow"><span className="eyebrow-line"/> YOUR WRITING ASSISTANT</div><h1>返信を、もっとスマートに。</h1><p>受信したメッセージを貼り付けるだけ。伝えたいことに合わせた返信の下書きを作成します。</p></div>
       <div className="editor-grid">
         <section className="surface input-panel" aria-labelledby="input-title">
           <div className="surface-head"><div className="section-index">01</div><div><h2 id="input-title">メッセージを入力</h2><p>相手から届いた文章と返信の条件を設定</p></div></div>
