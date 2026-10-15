@@ -6,6 +6,7 @@ services:
       PORT: "8080"
       LLM_PROVIDER: fake
       GENERATION_ENABLED: "true"
+      INTERNAL_API_SECRET: ${INTERNAL_API_SECRET:-}
     expose:
       - "8080"
     healthcheck:
@@ -19,8 +20,14 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
     environment:
       GO_API_ORIGIN: http://api:8080
+      INTERNAL_API_SECRET: ${INTERNAL_API_SECRET:-}
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
     ports:
       - "127.0.0.1:3001:3000"
     depends_on:
