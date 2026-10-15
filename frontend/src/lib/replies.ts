@@ -18,14 +18,14 @@ export function parseReply(data: unknown): string {
   return data.reply;
 }
 
-export async function generateReply(input: GenerateInput, signal?: AbortSignal): Promise<string> {
+export async function generateReply(input: GenerateInput, signal?: AbortSignal, accessToken?: string | null): Promise<string> {
   const invalid = validateInput(input);
   if (invalid) throw new Error(invalid);
   let response: Response;
   try {
     response = await fetch("/api/v1/replies/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },
       body: JSON.stringify(input),
       signal,
       cache: "no-store",
@@ -53,6 +53,7 @@ export async function generateReply(input: GenerateInput, signal?: AbortSignal):
       }
       throw new Error("リクエストが制限されています。しばらく待ってから再試行してください。");
     }
+    if (response.status === 401) throw new Error("ログインが必要です。再度ログインしてください。");
     if (response.status === 503) throw new Error("生成機能は現在停止中、または混雑しています。");
     if (response.status === 400 || response.status === 413) throw new Error("入力内容を確認してください。");
     throw new Error("通信に失敗しました。時間をおいて再試行してください。");
