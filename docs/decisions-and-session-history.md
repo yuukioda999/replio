@@ -458,3 +458,11 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **代替案:** 実LLM直結はAPI原価・匿名利用制限が未確定のため不採用。Gin・DBも導入しない。
 - **未決定:** 匿名利用上限、費用上限、実LLMモデル、公開運用のBot対策。Fake LLMは入力に応じた文章生成をしない。
 - **状態:** 実装とテストコードをPRブランチに作成。CI・レビュー・mainマージは未確認。
+
+
+### BE-003 CI失敗と修正（2026-10-15）
+
+- **最初のCI:** 失敗。`internal/handler/reply_test.go` の `net/http` 未使用importによるGoビルドエラー。
+- **対応:** 未使用importを削除。加えてJSON後続データ読み取り時のサイズ超過もHTTP 413に統一。
+- **証跡:** [GitHub Actions実行](https://github.com/yuukioda999/replio/actions/runs/38659981035)。
+- **状態:** 修正後CIの成功は未確認。PRはDraftのまま。
