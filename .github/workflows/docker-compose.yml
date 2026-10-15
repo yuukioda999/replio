@@ -1,0 +1,39 @@
+name: Docker Compose CI
+on:
+  pull_request:
+    paths:
+      - "compose.yaml"
+      - "backend/**"
+      - "frontend/**"
+      - ".github/workflows/docker-compose.yml"
+  push:
+    branches: [main]
+    paths:
+      - "compose.yaml"
+      - "backend/**"
+      - "frontend/**"
+permissions:
+  contents: read
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Compose configuration
+        run: docker compose config -q
+      - name: Build and start services
+        run: docker compose up -d --build --wait
+      - name: Smoke test UI
+        run: curl --fail --retry 10 --retry-delay 2 http://127.0.0.1:3001/
+      - name: Smoke test reply API through Next.js
+        run: |
+          curl --fail-with-body -X POST http://127.0.0.1:3001/api/v1/replies/generate \
+            -H 'Content-Type: application/json' \
+            -d '{"message":"来週までに回答できますか？","instruction":"確認して回答する","channel":"email","tone":"polite"}' \
+            | grep -q '"reply"'
+      - name: Logs
+        if: always()
+        run: docker compose logs --no-color
+      - name: Shutdown
+        if: always()
+        run: docker compose down
