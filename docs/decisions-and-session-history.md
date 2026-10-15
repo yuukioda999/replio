@@ -524,3 +524,14 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **安全性:** Fake LLMのまま。Claude API接続と利用量通知はシステム完成後に実施する方針。
 - **影響範囲:** frontend画面・スタイル・契約テストと本履歴。GitHub Pages LPは変更しない。
 - **状態:** PR作成・CI・人間の視覚レビュー待ち。mainマージは未確認。
+
+
+---
+
+## 24. 2026-10-15 DEV-001 Docker Composeローカル統合環境
+
+- **Issue:** #26。Go APIとNext.jsをDocker Composeで統合し、`docker compose up --build`で起動可能にする。
+- **構成:** Go 1.23とNode 22のマルチステージDockerfile。APIはCompose内部ネットワークのみ、Next.jsはlocalhost:3001に公開。
+- **安全性:** Composeはローカル開発用のみ。Fake LLM、`GENERATION_ENABLED=true`。本番公開時は無効化・認証などを別途検討。
+- **テスト:** Compose構成検証、ビルド、HTTPスモークテストをCIに追加。CI結果確認と人間レビュー前のmainマージはしない。
+- **影響範囲:** Docker構成・ドキュメント・CI。本番Claude API、DB、GitHub Pages LPは変更しない。
