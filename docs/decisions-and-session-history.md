@@ -400,3 +400,26 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 
 **出典:** ユーザーの「このmdファイルをもとに作業して決定したことはここに追記していって」という指示。
 **状態:** 運用方針として決定。以後の開発作業に適用。
+
+
+---
+
+## 15. 2026-10-15 BE-001 作業記録（レビュー待ち）
+
+**作業:** [Issue #8](https://github.com/yuukioda999/replio/issues/8) を起票し、[Draft PR #9](https://github.com/yuukioda999/replio/pull/9) で Go API の初期構築を提案。
+
+- **採用済み方針に準拠:** Go 標準ライブラリ `net/http` を使う。Gin、DB、ログイン、LLM、決済を導入しない。
+- **今回の実装提案:** `backend/go.mod`、`backend/cmd/api/main.go`、`backend/cmd/api/main_test.go`、`backend/README.md`。
+- **暫定的な実装上の選択:** `go.mod` は Go 1.23.0。最終Goバージョンの決定ではない。
+- **未実装:** `/healthz`、LLM、ユースケース、Next.js接続、匿名アクセス制限。
+- **状態:** Draft PR、main未マージ。ローカルGoテスト・CI実行は未確認。人間のレビュー待ち。
+- **代替案:** Gin採用は過去合意に反するため不採用。今回は過剰な構成を避け、まず起動可能なサーバーを作る。
+- **影響範囲:** `backend/` のみ（この記録文書を除く）。既存LPには変更なし。
+- **次のアクション:** `go test ./...` と起動動作を検証し、PRをレビュー・マージ後、BE-002を起票。
+
+
+### BE-001 検証追記（2026-10-15）
+
+- **ローカル検証成功:** Go 1.23.2でGitHubのPRブランチから取得したGoソースと同一内容を実行し、`go test ./...`、`go vet ./...`、`PORT=19090`でのHTTP 404応答、不正PORTでの異常終了を確認。
+- **証跡:** [PR #9の検証コメント](https://github.com/yuukioda999/replio/pull/9#issuecomment-6181246087)
+- **未完了:** GitHub CIの実行、ユーザーによるコードレビュー、mainへのマージ。Draft PRを維持。
