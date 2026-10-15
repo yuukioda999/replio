@@ -19,6 +19,10 @@ cd backend
 go test ./...
 ```
 
-All routes currently return HTTP 404. `/healthz`, API routes, LLM integrations, auth, and persistence are intentionally out of scope for BE-001.
+## Health check (BE-002)
+
+`GET /healthz` returns HTTP 200 with JSON `{"status":"ok"}`. Other methods on `/healthz` return HTTP 405 and `Allow: GET`. Unknown routes return 404.
+
+LLM integrations, auth, persistence, and application API routes are not implemented yet.
 
 This work is tracked in [Issue #8](https://github.com/yuukioda999/replio/issues/8).
