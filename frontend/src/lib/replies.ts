@@ -37,7 +37,22 @@ export async function generateReply(input: GenerateInput, signal?: AbortSignal):
     throw new Error("ネットワークに接続できません。接続状況を確認してください。");
   }
   if (!response.ok) {
-    if (response.status === 429) throw new Error("利用が集中しています。しばらく待ってから再試行してください。");
+    if (response.status === 429) {
+      // A Replio quota response contains rate_limited and Retry-After.
+      // Other 429 responses must not be mistaken for the local hourly quota.
+      let code: unknown;
+      try { code = (await response.json())?.error; } catch { /* no usable JSON */ }
+      if (code === "rate_limited") {
+        const raw = response.headers?.get("Retry-After");
+        const seconds = raw !== null && raw !== undefined && /^\\d+$/.test(raw.trim()) ? Number(raw) : NaN;
+        const minutes = Math.ceil(seconds / 60);
+        const wait = Number.isSafeInteger(minutes) && minutes > 0 && minutes <= 60 * 24
+          ? `約${minutes}分後に再試行してください。`
+          : "しばらく待ってから再試行してください。";
+        throw new Error(`1時間あたりの生成回数の上限に達しました。${wait}`);
+      }
+      throw new Error("リクエストが制限されています。しばらく待ってから再試行してください。");
+    }
     if (response.status === 503) throw new Error("生成機能は現在停止中、または混雑しています。");
     if (response.status === 400 || response.status === 413) throw new Error("入力内容を確認してください。");
     throw new Error("通信に失敗しました。時間をおいて再試行してください。");
