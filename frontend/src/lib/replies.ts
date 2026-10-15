@@ -44,7 +44,7 @@ export async function generateReply(input: GenerateInput, signal?: AbortSignal):
       try { code = (await response.json())?.error; } catch { /* no usable JSON */ }
       if (code === "rate_limited") {
         const raw = response.headers?.get("Retry-After");
-        const seconds = raw !== null && raw !== undefined && /^\\d+$/.test(raw.trim()) ? Number(raw) : NaN;
+        const seconds = raw !== null && raw !== undefined && /^\d+$/.test(raw.trim()) ? Number(raw) : NaN;
         const minutes = Math.ceil(seconds / 60);
         const wait = Number.isSafeInteger(minutes) && minutes > 0 && minutes <= 60 * 24
           ? `約${minutes}分後に再試行してください。`
