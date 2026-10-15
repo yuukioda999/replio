@@ -555,3 +555,13 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **Issue:** #30。既存のJSONパーサーが単一オブジェクトのみを受け付けることを、連結オブジェクト・余分な数値・不正型で検証。
 - **契約:** 成功時`reply`、失敗時`error`のJSON応答とContent-Typeを検証。内部詳細を返さないことをテスト。
 - **影響範囲:** Go APIのテストと設計履歴のみ。既存の公開API仕様、GitHub Pages LP、Claude APIは変更しない。
+
+---
+
+## 26. 2026-10-15 BE-005 Claude API ローカル手動切替
+
+- 既存Claudeアダプターを利用し、Docker Composeで `LLM_PROVIDER=claude` に明示的に切り替えられるようにした。既定は `fake`。
+- `.env.example` を追加し、APIキー・モデル・出力上限・IPレート制限・同時実行数の設定方法を明示。
+- APIキーはGoコンテナのみに渡す。ルートのGitHub Pages LPは変更しない。
+- Anthropicプリペイドの手動購入・自動チャージOFFは利用者がConsoleで設定する。APIの残高確認・厳密な費用上限は未実装。
+- 実APIへの疎通はAPIキー未設定のため未検証。公開運用不可。CI確認後にレビューする。
