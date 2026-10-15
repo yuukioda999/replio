@@ -24,10 +24,10 @@ jobs:
       - name: Build and start services
         run: docker compose up -d --build --wait
       - name: Smoke test UI
-        run: curl --fail --retry 20 --retry-delay 2 --retry-connrefused http://127.0.0.1:3001/
+        run: curl --fail --retry 20 --retry-delay 2 --retry-all-errors http://127.0.0.1:3001/
       - name: Smoke test reply API through Next.js
         run: |
-          curl --fail-with-body --retry 10 --retry-delay 2 --retry-connrefused -X POST http://127.0.0.1:3001/api/v1/replies/generate \
+          curl --fail-with-body --retry 10 --retry-delay 2 --retry-all-errors -X POST http://127.0.0.1:3001/api/v1/replies/generate \
             -H 'Content-Type: application/json' \
             -d '{"message":"来週までに回答できますか？","instruction":"確認して回答する","channel":"email","tone":"polite"}' \
             | grep -q '"reply"'
