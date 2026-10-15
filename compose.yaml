@@ -4,8 +4,13 @@ services:
       context: ./backend
     environment:
       PORT: "8080"
-      LLM_PROVIDER: fake
+      LLM_PROVIDER: ${LLM_PROVIDER:-fake}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CLAUDE_MODEL: ${CLAUDE_MODEL:-}
+      CLAUDE_MAX_TOKENS: ${CLAUDE_MAX_TOKENS:-512}
       GENERATION_ENABLED: "true"
+      GENERATION_MAX_REQUESTS_PER_HOUR: ${GENERATION_MAX_REQUESTS_PER_HOUR:-10}
+      GENERATION_MAX_CONCURRENT: ${GENERATION_MAX_CONCURRENT:-2}
     expose:
       - "8080"
     healthcheck:
