@@ -1,6 +1,7 @@
 package handler
 
 import (
+ "encoding/json"
  "net/http/httptest"
  "strings"
  "testing"
@@ -16,6 +17,9 @@ func TestReplyHandler(t *testing.T) {
   {"invalid message","POST","application/json",`{"message":" ","channel":"email","tone":"polite"}`,400},
   {"invalid channel","POST","application/json",`{"message":"hi","channel":"invalid","tone":"polite"}`,400},
   {"malformed","POST","application/json","{",400},
+  {"trailing JSON object","POST","application/json",`{"message":"hi","channel":"chat","tone":"neutral"} {"message":"again"}`,400},
+  {"trailing JSON number","POST","application/json",`{"message":"hi","channel":"chat","tone":"neutral"} 1`,400},
+  {"invalid JSON type","POST","application/json",`{"message":42,"channel":"chat","tone":"neutral"}`,400},
   {"unknown field","POST","application/json",`{"message":"hi","channel":"chat","tone":"neutral","other":1}`,400},
   {"wrong content type","POST","text/plain","hi",415},
   {"wrong method","GET","application/json","",405},
@@ -27,7 +31,13 @@ func TestReplyHandler(t *testing.T) {
   w:=httptest.NewRecorder()
   h.ServeHTTP(w,req)
   if w.Code!=tc.status {t.Fatalf("status %d, want %d; body=%s",w.Code,tc.status,w.Body.String())}
-  if tc.status==200 && !strings.Contains(w.Body.String(),`"reply"`) {t.Fatalf("missing reply: %s",w.Body.String())}
+  if got:=w.Header().Get("Content-Type"); !strings.HasPrefix(got,"application/json") {t.Fatalf("content-type %q",got)}
+  var payload map[string]any
+  if err:=json.Unmarshal(w.Body.Bytes(),&payload);err!=nil {t.Fatalf("invalid response JSON: %v",err)}
+  if tc.status==200 {if _,ok:=payload["reply"].(string);!ok {t.Fatalf("missing reply: %s",w.Body.String())}} else {
+   if _,ok:=payload["error"].(string);!ok {t.Fatalf("missing error code: %s",w.Body.String())}
+   if _,leaks:=payload["details"];leaks {t.Fatal("unexpected internal details")}
+  }
   if tc.status==405 && w.Header().Get("Allow")!="POST" {t.Fatal("missing Allow header")}
  })}
 }
