@@ -19,7 +19,7 @@ func TestReplyHandler(t *testing.T) {
   {"unknown field","POST","application/json",`{"message":"hi","channel":"chat","tone":"neutral","other":1}`,400},
   {"wrong content type","POST","text/plain","hi",415},
   {"wrong method","GET","application/json","",405},
-  {"too large","POST","application/json",strings.Repeat("x",17000),413},
+  {"too large","POST","application/json",`{"message":"`+strings.Repeat("x",17000)+`","channel":"chat","tone":"neutral"}`,413},
  }
  for _,tc:=range cases {t.Run(tc.name,func(t *testing.T){
   req:=httptest.NewRequest(tc.method,"/api/v1/replies/generate",strings.NewReader(tc.body))
