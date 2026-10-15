@@ -423,3 +423,15 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **ローカル検証成功:** Go 1.23.2でGitHubのPRブランチから取得したGoソースと同一内容を実行し、`go test ./...`、`go vet ./...`、`PORT=19090`でのHTTP 404応答、不正PORTでの異常終了を確認。
 - **証跡:** [PR #9の検証コメント](https://github.com/yuukioda999/replio/pull/9#issuecomment-6181246087)
 - **未完了:** GitHub CIの実行、ユーザーによるコードレビュー、mainへのマージ。Draft PRを維持。
+
+
+---
+
+## 16. 2026-10-15 BE-002 実装記録（レビュー待ち）
+
+- **Issue:** [#10](https://github.com/yuukioda999/replio/issues/10)。`GET /healthz` を追加し、JSON `{"status":"ok"}` とHTTP 200を返す。
+- **設計:** 既存の `net/http` のルーティングに追加。GET以外は405と `Allow: GET` を返す。認証、DB、LLMは追加しない。
+- **テスト:** 正常系・メソッド制限・未登録URLのテストコードを追加。GitHub CI実行結果は未確認。
+- **代替案:** Ginや外部ヘルスチェックライブラリは既存方針とMVP最小化に合わないため不採用。
+- **状態:** ブランチ上で実装、PRレビュー前。main未マージ。
+- **次の作業:** [CI-001 #11](https://github.com/yuukioda999/replio/issues/11) によりGo自動テストを追加し、CI実行結果を確認する。
