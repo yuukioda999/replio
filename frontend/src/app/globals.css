@@ -58,3 +58,75 @@ textarea { font-size: 14px; line-height: 1.65; }
   .top-label,.segment { font-size: 12px; }
   .surface-head h2 { font-size: 16px; }
 }
+
+/* UI-002 fixed desktop workspace: scrolling stays inside text editors. */
+@media (min-width: 801px) and (min-height: 740px) {
+  html, body { height: 100%; overflow: hidden; }
+  .app-shell { height: 100dvh; min-height: 0; overflow: hidden; }
+  .topbar { flex: 0 0 auto; }
+  .main {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 14px;
+    padding-bottom: 10px;
+    overflow: hidden;
+  }
+  .editor-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: stretch;
+  }
+  .surface { min-height: 0; }
+  .input-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .input-panel .surface-head, .output-panel .surface-head { flex: 0 0 auto; }
+  .form-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .message-field {
+    flex: 1 1 auto;
+    min-height: 76px;
+    height: auto;
+    resize: none;
+    overflow-y: auto;
+  }
+  .field-foot { flex: 0 0 auto; margin-top: 5px; margin-bottom: 8px; }
+  .field-group { flex: 0 0 auto; }
+  .field-group label { margin-bottom: 5px; }
+  .field-group textarea {
+    height: 58px;
+    min-height: 58px;
+    resize: none;
+    overflow-y: auto;
+  }
+  .control-group { flex: 0 0 auto; margin-top: 9px; }
+  .control-label { margin-bottom: 5px; }
+  .segment { padding: 6px 5px; }
+  .generate-button {
+    flex: 0 0 auto;
+    position: static;
+    margin-top: 10px;
+    padding: 10px 14px;
+    box-shadow: none;
+  }
+  .error-box { flex: 0 0 auto; margin-top: 6px; padding: 7px 10px; }
+  .output-panel { overflow: hidden; }
+  .output-body { min-height: 0; overflow: hidden; }
+  .empty-state { min-height: 0; flex: 1 1 auto; }
+  .reply-field { min-height: 0; height: 100%; resize: none; overflow-y: auto; }
+  .output-note { flex: 0 0 auto; }
+  .bottom-hint { flex: 0 0 auto; margin: 8px auto 0; }
+  .footer { flex: 0 0 auto; padding-top: 8px; padding-bottom: 8px; }
+}
+/* Small/short viewports retain document scrolling so controls cannot be clipped. */
