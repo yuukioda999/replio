@@ -35,3 +35,26 @@
 
 /* The workspace opens directly on the editor; the marketing headline belongs on the LP. */
 @media (min-width: 801px) { .main { padding-top: 20px; } }
+
+/* UI-002 readability pass: legible type without restoring the removed hero. */
+body { font-size: 15px; }
+.top-label,.status { font-size: 13px; }
+.surface-head h2 { font-size: 17px; }
+.surface-head p { font-size: 13px; }
+.section-index { font-size: 12px; }
+.field-heading label,.field-group label,.control-label { font-size: 14px; }
+.required,.optional { font-size: 12px; }
+.text-action { font-size: 13px; }
+textarea { font-size: 14px; line-height: 1.65; }
+.field-foot { font-size: 12px; }
+.segment { font-size: 13px; }
+.generate-button { font-size: 15px; }
+.error-box { font-size: 13px; }
+.ready-tag,.output-toolbar,.copy-button { font-size: 13px; }
+.empty-state h3 { font-size: 15px; }
+.empty-state p { font-size: 13px; }
+.output-note p,.bottom-hint,.footer { font-size: 12px; }
+@media (max-width: 420px) {
+  .top-label,.segment { font-size: 12px; }
+  .surface-head h2 { font-size: 16px; }
+}
