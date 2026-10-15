@@ -2,6 +2,8 @@ package handler
 
 import (
  "encoding/json"
+ "crypto/subtle"
+ "os"
  "net"
  "net/http"
  "strconv"
@@ -30,6 +32,11 @@ func (g *Guard) Wrap(next http.Handler) http.Handler {
   if r.Method != http.MethodPost {next.ServeHTTP(w,r);return}
   w.Header().Set("Content-Type","application/json; charset=utf-8")
   if !g.enabled {writeGuardError(w,http.StatusServiceUnavailable,"generation_disabled");return}
+  // The Go API is private behind Next.js; authenticate the internal proxy.
+  if secret:=os.Getenv("INTERNAL_API_SECRET");secret!="" {
+   supplied:=r.Header.Get("X-Replio-Internal-Secret")
+   if subtle.ConstantTimeCompare([]byte(secret),[]byte(supplied))!=1 {writeGuardError(w,http.StatusUnauthorized,"unauthorized");return}
+  }
   // RemoteAddr comes from the direct TCP peer. Forwarded headers are deliberately ignored.
   ip,_,err:=net.SplitHostPort(r.RemoteAddr)
   if err!=nil {writeGuardError(w,http.StatusBadRequest,"invalid_remote_address");return}
