@@ -35,7 +35,7 @@ test("rejects invalid inputs before fetching", async () => {
 test("handles HTTP statuses, malformed JSON and network errors", async () => {
   const original = globalThis.fetch;
   try {
-    for (const [status, message] of [[429, /集中/], [503, /停止中/], [400, /入力内容/], [500, /通信に失敗/]]) {
+    for (const [status, message] of [[429, /制限されています/], [503, /停止中/], [400, /入力内容/], [500, /通信に失敗/]]) {
       globalThis.fetch = async () => ({ ok: false, status });
       await assert.rejects(generateReply(valid), message);
     }
