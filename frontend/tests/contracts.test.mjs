@@ -8,7 +8,7 @@ test("API contract and error statuses are represented", () => {
   for (const value of ["/api/v1/replies/generate", "POST", "429", "503", "message", "instruction", "channel", "tone"]) assert.ok(api.includes(value), value);
 });
 test("UI supports editing, copying and regenerating", () => {
-  for (const value of ["setReply", "clipboard.writeText", "再生成", "role=\"alert\"", "生成中"]) assert.ok(page.includes(value), value);
+  for (const value of ["setReply", "clipboard.writeText", "再生成", "role=\"alert\"", "生成しています"]) assert.ok(page.includes(value), value);
 });
 test("server-side proxy origin is configured", () => {
   assert.ok(config.includes("process.env.GO_API_ORIGIN"));
