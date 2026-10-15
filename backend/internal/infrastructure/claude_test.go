@@ -37,7 +37,7 @@ func TestClaudeFailures(t *testing.T) {
  }
 }
 func TestClaudeTimeout(t *testing.T) {
- server:=httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter,r *http.Request){<-r.Context().Done()}))
+ server:=httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter,r *http.Request){time.Sleep(100*time.Millisecond);w.WriteHeader(http.StatusOK)}))
  defer server.Close()
  c:=ClaudeLLM{Client:&http.Client{Timeout:20*time.Millisecond},APIKey:"key",Model:"model",Endpoint:server.URL,MaxTokens:256}
  _,err:=c.Generate(context.Background(),"test")
