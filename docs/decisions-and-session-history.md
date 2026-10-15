@@ -423,3 +423,14 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **ローカル検証成功:** Go 1.23.2でGitHubのPRブランチから取得したGoソースと同一内容を実行し、`go test ./...`、`go vet ./...`、`PORT=19090`でのHTTP 404応答、不正PORTでの異常終了を確認。
 - **証跡:** [PR #9の検証コメント](https://github.com/yuukioda999/replio/pull/9#issuecomment-6181246087)
 - **未完了:** GitHub CIの実行、ユーザーによるコードレビュー、mainへのマージ。Draft PRを維持。
+
+
+---
+
+## 17. 2026-10-15 CI-001 自動テスト構築（レビュー待ち）
+
+- **Issue:** [#11](https://github.com/yuukioda999/replio/issues/11)。Goのテスト・静的解析をGitHub Actionsで自動化する。
+- **実装:** `.github/workflows/go-backend.yml`。`backend/**` またはワークフロー変更時のPRとmainへのpushで実行する。
+- **内容:** Goモジュールのバージョンを参照し、`go test ./...` と `go vet ./...` を実行。読み取り専用権限を指定。
+- **代替案:** Pages用のワークフローを編集する案は、既存のPagesタイムアウト問題と切り離すため不採用。
+- **状態:** PR作成前の実装。CIの実際の成功は未確認。main未マージ。
