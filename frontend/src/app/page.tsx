@@ -1,11 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAuthClient } from "@/lib/auth";
 import { generateReply, validateInput, type Channel, type Tone } from "@/lib/replies";
 
 const channels: { value: Channel; label: string }[] = [{value:"email",label:"メール"},{value:"slack",label:"Slack"},{value:"chat",label:"チャット"}];
 const tones: { value: Tone; label: string }[] = [{value:"polite",label:"丁寧"},{value:"neutral",label:"標準"},{value:"casual",label:"親しみやすい"}];
 const sample = "お世話になっております。来週金曜日までにシステムの修正をご対応いただくことは可能でしょうか？ご確認よろしくお願いいたします。";
 export default function Home() {
+  const [sessionToken,setSessionToken]=useState<string | null>(null);
+  const [authConfigured,setAuthConfigured]=useState(false);
+  useEffect(()=>{
+    const auth=getAuthClient();
+    if(!auth)return;
+    setAuthConfigured(true);
+    void auth.auth.getSession().then(({data})=>setSessionToken(data.session?.access_token??null));
+    const {data:{subscription}}=auth.auth.onAuthStateChange((_event,session)=>setSessionToken(session?.access_token??null));
+    return ()=>subscription.unsubscribe();
+  },[]);
   const [message,setMessage]=useState("");
   const [instruction,setInstruction]=useState("");
   const [channel,setChannel]=useState<Channel>("email");
@@ -20,10 +31,11 @@ export default function Home() {
     const invalid=validateInput(input);
     if(invalid){setError(invalid);document.getElementById("message")?.focus();return;}
     if(busy)return;
+    if(authConfigured && !sessionToken){setError("ログインしてから生成してください。");return;}
     setError("");setCopied(false);setBusy(true);
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),25000);
-    try{setReply(await generateReply(input,controller.signal));setGenerated(true);}
+    try{setReply(await generateReply(input,controller.signal,sessionToken));setGenerated(true);}
     catch(e){setError(controller.signal.aborted?"通信がタイムアウトしました。再試行してください。":e instanceof Error?e.message:"生成に失敗しました。");}
     finally{clearTimeout(timeout);setBusy(false);}
   }
@@ -32,7 +44,7 @@ export default function Home() {
     catch{setError("コピーできませんでした。文章を選択してコピーしてください。");}
   }
   return <div className="app-shell">
-    <header className="topbar"><div className="topbar-inner"><a className="wordmark" href="/" aria-label="Replio ホーム"><span className="logo-symbol">R<span>.</span></span><span>replio</span></a><span className="top-divider"/><span className="top-label">返信文ジェネレーター</span><span className="top-spacer"/><span className="status"><span className="status-dot"/>ワークスペース</span></div></header>
+    <header className="topbar"><div className="topbar-inner"><a className="wordmark" href="/" aria-label="Replio ホーム"><span className="logo-symbol">R<span>.</span></span><span>replio</span></a><span className="top-divider"/><span className="top-label">返信文ジェネレーター</span><span className="top-spacer"/>{authConfigured && (sessionToken?<button type="button" onClick={()=>void getAuthClient()?.auth.signOut()}>ログアウト</button>:<a href="/login">ログイン</a>)}<span className="status"><span className="status-dot"/>ワークスペース</span></div></header>
     <main className="main">
       <div className="editor-grid">
         <section className="surface input-panel" aria-labelledby="input-title">
