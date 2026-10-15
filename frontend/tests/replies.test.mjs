@@ -35,7 +35,7 @@ test("rejects invalid inputs before fetching", async () => {
 test("handles HTTP statuses, malformed JSON and network errors", async () => {
   const original = globalThis.fetch;
   try {
-    for (const [status, message] of [[429, /集中/], [503, /停止中/], [400, /入力内容/], [500, /通信に失敗/]]) {
+    for (const [status, message] of [[429, /制限されています/], [503, /停止中/], [400, /入力内容/], [500, /通信に失敗/]]) {
       globalThis.fetch = async () => ({ ok: false, status });
       await assert.rejects(generateReply(valid), message);
     }
@@ -45,5 +45,27 @@ test("handles HTTP statuses, malformed JSON and network errors", async () => {
     await assert.rejects(generateReply(valid), /ネットワーク/);
     globalThis.fetch = async () => ({ ok: true, json: async () => ({ reply: "了解です" }) });
     assert.equal(await generateReply(valid), "了解です");
+  } finally { globalThis.fetch = original; }
+});
+
+test("explains local rate limit and uses Retry-After without retrying", async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  try {
+    globalThis.fetch = async () => {
+      calls++;
+      return { ok: false, status: 429, headers: { get: () => "125" }, json: async () => ({ error: "rate_limited" }) };
+    };
+    await assert.rejects(generateReply(valid), /上限に達しました。約3分後/);
+    assert.equal(calls, 1, "429 must not automatically retry");
+
+    globalThis.fetch = async () => ({ ok: false, status: 429, headers: { get: () => "not-a-number" }, json: async () => ({ error: "rate_limited" }) });
+    await assert.rejects(generateReply(valid), /上限に達しました。しばらく待って/);
+
+    globalThis.fetch = async () => ({ ok: false, status: 429, headers: { get: () => "30" }, json: async () => ({ error: "upstream_rate_limited" }) });
+    await assert.rejects(generateReply(valid), /リクエストが制限されています/);
+
+    globalThis.fetch = async () => ({ ok: false, status: 429, json: async () => { throw new Error("bad JSON"); } });
+    await assert.rejects(generateReply(valid), /リクエストが制限されています/);
   } finally { globalThis.fetch = original; }
 });
