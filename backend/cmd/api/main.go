@@ -8,6 +8,10 @@ import (
  "os"
  "strconv"
  "time"
+
+ "github.com/yuukioda999/replio/backend/internal/application"
+ "github.com/yuukioda999/replio/backend/internal/handler"
+ "github.com/yuukioda999/replio/backend/internal/infrastructure"
 )
 
 func portFromEnv(getenv func(string) string) (string, error) {
@@ -20,6 +24,7 @@ func portFromEnv(getenv func(string) string) (string, error) {
 
 func newHandler() http.Handler {
  mux := http.NewServeMux()
+ mux.Handle("/api/v1/replies/generate", handler.ReplyHandler{Service: application.Service{LLM: infrastructure.FakeLLM{}}})
  mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
   if r.Method != http.MethodGet {
    w.Header().Set("Allow", "GET")

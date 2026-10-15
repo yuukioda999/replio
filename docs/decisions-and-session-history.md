@@ -445,3 +445,27 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **方針:** CI-001の記録を保持したままBE-002の記録を追記。旧PR #12は置き換える。
 - **BE-002の仕様:** `GET /healthz` は200とJSON `{"status":"ok"}`、GET以外は405と `Allow: GET`、未登録パスは404。
 - **状態:** CIとレビュー結果を確認するまで未マージ。
+
+
+---
+
+## 19. 2026-10-15 BE-003 Fake LLM返信API（レビュー待ち）
+
+- **Issue:** [#15](https://github.com/yuukioda999/replio/issues/15)。ポートフォリオの実装を優先し、外部API課金なしでAPI契約を検証。
+- **今回の実装案:** `POST /api/v1/replies/generate`、JSON入力 `message`、`instruction`（任意）、`channel`（email/slack/chat）、`tone`（polite/neutral/casual）。`context`ではなく既存のAPI例に合わせ`instruction`を採用。
+- **構成:** HTTP Handler、Application Service/PromptBuilder、LLMポート、Infrastructure Fake LLM。未確認事項を確約しない指示をプロンプトに含めるが、出力保証はしない。
+- **安全対策（今回の暫定実装値）:** リクエスト本文最大16KiB、JSON以外415、サイズ超過413、不正入力400、未対応メソッド405。入力サイズ上限は正式なサービス仕様として承認済みではない。
+- **代替案:** 実LLM直結はAPI原価・匿名利用制限が未確定のため不採用。Gin・DBも導入しない。
+- **未決定:** 匿名利用上限、費用上限、実LLMモデル、公開運用のBot対策。Fake LLMは入力に応じた文章生成をしない。
+- **状態:** 実装とテストコードをPRブランチに作成。CI・レビュー・mainマージは未確認。
+
+
+### BE-003 CI失敗と修正（2026-10-15）
+
+- **最初のCI:** 失敗。`internal/handler/reply_test.go` の `net/http` 未使用importによるGoビルドエラー。
+- **対応:** 未使用importを削除。加えてJSON後続データ読み取り時のサイズ超過もHTTP 413に統一。
+- **証跡:** [GitHub Actions実行](https://github.com/yuukioda999/replio/actions/runs/38659981035)。
+- **状態:** 修正後CIの成功は未確認。PRはDraftのまま。
+
+- **2回目のCI失敗:** サイズ超過テストがJSONではない17,000文字の文字列を送っており、JSONデコーダーが早期に構文エラー（400）を返した。仕様不具合ではなくテストデータの不備と判断。
+- **修正:** 妥当なJSON本文を16KiB超にして、HTTP 413を正しく検証するよう変更。再実行結果は確認待ち。
