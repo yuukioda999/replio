@@ -546,3 +546,14 @@ Day 2資料のセットアップ手順では、既存の`docs/01-business/hypoth
 - **テスト:** TypeScriptをNodeテスト内で変換し、検証・レスポンス解析・HTTP異常系を実行する単体テストを追加。
 - **影響範囲:** frontendのAPIクライアント、テスト、履歴のみ。LPとClaude APIの設定は変更なし。
 - **状態:** PRでCIとレビュー確認後にmainへマージ。
+
+
+---
+
+## 26. 2026-10-15 BE-005 Claude API ローカル手動切替
+
+- 既存Claudeアダプターを利用し、Docker Composeで `LLM_PROVIDER=claude` に明示的に切り替えられるようにした。既定は `fake`。
+- `.env.example` を追加し、APIキー・モデル・出力上限・IPレート制限・同時実行数の設定方法を明示。
+- APIキーはGoコンテナのみに渡す。ルートのGitHub Pages LPは変更しない。
+- Anthropicプリペイドの手動購入・自動チャージOFFは利用者がConsoleで設定する。APIの残高確認・厳密な費用上限は未実装。
+- 実APIへの疎通はAPIキー未設定のため未検証。公開運用不可。CI確認後にレビューする。
