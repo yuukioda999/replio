@@ -55,3 +55,16 @@ Do not commit API keys or customer messages. The Claude HTTP client has a 20-sec
 - 制限時は429と`Retry-After`、停止中・混雑時は503を返す
 
 **制約:** 接続元IPは直接のTCPピアの`RemoteAddr`を使い、`X-Forwarded-For`は信頼しません。リバースプロキシ配下では全利用者が同一IPに見えるため、本番では信頼できるプロキシ設定・IP取得方法を別途設計してください。制限はプロセス内メモリであり、再起動・複数インスタンスでリセット・分散されます。1万件超の異なるIPの記録を防ぐため容量ガードがあります。**請求額の上限を保証する機能ではありません。** 公開前に外部の支出監視、緊急停止運用、CAPTCHA等のBot対策を別途検討してください。
+
+
+## Docker ComposeでClaudeをローカル実行（オプトイン）
+
+1. リポジトリ直下で `cp .env.example .env` を実行する。
+2. Anthropic ConsoleでAPIクレジットを手動購入し、**自動チャージを無効**にする。Claude Pro/Codeとは別課金。
+3. `.env` に `LLM_PROVIDER=claude`、`ANTHROPIC_API_KEY`、利用可能なモデルID `CLAUDE_MODEL` を設定する。モデルIDはConsoleで確認する。
+4. `docker compose up --build` を実行し、`http://localhost:3001` からテストする。
+5. 課金を止めたい場合は `.env` を `LLM_PROVIDER=fake` に戻し、`docker compose up -d --force-recreate api` を実行する。
+
+`compose.yaml` は初期状態でFakeを選び、APIキー未設定のままClaudeへ切り替えるとGo APIは起動に失敗する（意図した安全側の動作）。APIキーはNext.jsへ渡さず、Goコンテナの環境変数にのみ渡す。
+
+**重要:** プリペイド残高切れは厳密な請求上限を保証しない。現状のレート制限はメモリ上のIP単位・同時実行数のみで、永続的な月間費用上限・認証・Bot対策は未実装。したがってこのCompose設定は**ローカル確認専用**であり、公開環境にそのままデプロイしないこと。残高はAnthropic Consoleで手動確認する。実APIへの疎通確認はAPIキー設定後に実施する。
