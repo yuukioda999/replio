@@ -32,3 +32,6 @@
   .generate-button { position: sticky; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 2; box-shadow: 0 6px 18px rgba(28,37,59,.15); }
   .input-panel { overflow: visible; }
 }
+
+/* The workspace opens directly on the editor; the marketing headline belongs on the LP. */
+@media (min-width: 801px) { .main { padding-top: 20px; } }
