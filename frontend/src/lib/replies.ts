@@ -42,6 +42,7 @@ export async function generateReply(input: GenerateInput, signal?: AbortSignal, 
       // Other 429 responses must not be mistaken for the local hourly quota.
       let code: unknown;
       try { code = (await response.json())?.error; } catch { /* no usable JSON */ }
+      if (code === "monthly_quota_exceeded") throw new Error("今月の無料生成回数（20回）に達しました。翌月に再度ご利用ください。");
       if (code === "rate_limited") {
         const raw = response.headers?.get("Retry-After");
         const seconds = raw !== null && raw !== undefined && /^\d+$/.test(raw.trim()) ? Number(raw) : NaN;
